@@ -106,6 +106,7 @@ class StopAtEOSGuide(Guide):
 
 class RegexGuide(Guide):
     """Guide to generate text in the language of a regular expression."""
+    print("Entre al RegexGuide que lo llamo desde regex")
 
     initial_state = 0
 

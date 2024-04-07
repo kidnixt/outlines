@@ -126,6 +126,7 @@ class Transformers:
         self.device = model.device
         self.model = model
         self.tokenizer = TransformerTokenizer(tokenizer)
+        print("Estoy en el init")
 
     @torch.inference_mode
     def forward(
@@ -174,8 +175,7 @@ class Transformers:
         past_key_values: Optional[Tuple] = None,
     ) -> torch.FloatTensor:
         logits, kv_cache = self.forward(input_ids, attention_mask, past_key_values)
-        next_token_logits = logits[..., -1, :]
-
+        next_token_logits = logits[..., -1, :]        
         return next_token_logits, kv_cache
 
 
@@ -220,5 +220,5 @@ def transformers(
 
     tokenizer_kwargs.setdefault("padding_side", "left")
     tokenizer = AutoTokenizer.from_pretrained(model_name, **tokenizer_kwargs)
-
+    print("DE ALGÚN LADO LLAME A LA FUNCIÓN TRANSFORMERS")
     return Transformers(model, tokenizer)

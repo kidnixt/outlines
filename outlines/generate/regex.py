@@ -10,6 +10,7 @@ from outlines.samplers import Sampler, multinomial
 
 @singledispatch
 def regex(model, regex_str: str, sampler: Sampler = multinomial()):
+    print("Entre al regex")
     """Generate structured text in the language of a regular expression.
 
     Parameters
@@ -33,7 +34,7 @@ def regex(model, regex_str: str, sampler: Sampler = multinomial()):
 
     device = model.device
     generator = SequenceGenerator(fsm, model, sampler, device)
-
+    
     return generator
 
 

@@ -685,15 +685,19 @@ def create_fsm_index_end_to_end(
     vocabulary: List[Tuple[Sequence[str], Sequence[int]]],
 ) -> Dict[int, Set[Tuple[int, int]]]:
     """Create an FSM state-to-vocabulary map/index through end-to-end token parsing."""
-
+    print("dentro de la función create_fsm_index_end_to_end")
+    print(vocabulary)
     # TODO: Consider using a `List` of `Set`s instead; that way we can JIT this
     # code, too.
     states_to_token_subsets: Dict[int, Set[Tuple[int, int]]] = {}
     seen: Set[int] = set()
     next_states = {fsm_info.initial}
-
+    print("next_states")
+    print(next_states)
     while next_states:
         start_state = next_states.pop()
+        print("start_state")
+        print(start_state)
 
         token_ids_end_states = state_scan_tokens(
             fsm_info.transitions,
@@ -704,6 +708,7 @@ def create_fsm_index_end_to_end(
             vocabulary,
             start_state,
         )
+        print(token_ids_end_states)
 
         for token_id_and_end_state in token_ids_end_states:
             states_to_token_subsets.setdefault(start_state, set()).add(
@@ -714,7 +719,7 @@ def create_fsm_index_end_to_end(
                 next_states.add(end_state)
 
         seen.add(start_state)
-
+    print(states_to_token_subsets)
     return states_to_token_subsets
 
 
@@ -762,6 +767,7 @@ def reduced_vocabulary(
     tokenizer: "Tokenizer",
 ) -> Tuple[List[Tuple[Sequence[str], Sequence[int]]], Set[int]]:
     """Create a map from decoded vocabulary tokens to lists of equivalent token ids."""
+    print("entre al reduced_vocabulary desde la funcion create_fsm_index_tokenizer")
     empty_token_ids = set()
     vocabulary: Dict[Union[str, Tuple[str, ...]], List[int]] = {}
     for token, token_idx in tokenizer.vocabulary.items():
@@ -828,7 +834,9 @@ def create_fsm_index_tokenizer(
         `fsm` needs to be deterministically ordered so that future caching makes sense.
 
     """
+    print("entre al create_fsm_index_tokenizer desde RegexGuided")
     vocabulary, empty_token_ids = reduced_vocabulary(tokenizer)
+    print("sali de la función reduced_vocabulary")
 
     states_to_token_subsets = create_fsm_index_end_to_end(fsm.fsm_info, vocabulary)
 
